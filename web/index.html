@@ -1,0 +1,249 @@
+<html>
+    <head>
+        <title>Анализ данных</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel = "stylesheet" href="bootstrap.min.css"/>
+        <script src="plotly.min.js"></script>
+    </head>
+
+    <style>
+        .nav-text {
+            display:none;
+            padding-bottom:20px;
+        }
+        
+        .nav-text .inner {
+            border:1px #ddd solid;
+            border-top:none	;
+            padding: 20px;
+        }
+        
+        .nav-text.active {display:block;}
+        
+        .pad {padding: 10px 0 10px;}
+        
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+            }
+        
+            .wrapper {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            }
+
+        PRE {
+            font-size:0.7em;
+            margin:0;
+        }
+        
+        H1 {
+            margin:30px auto 30px;
+            text-align: center;
+        }
+        
+    </style>
+
+    <script>
+        function plot() {
+        Plotly.d3.csv("out.csv", function(data){ processData(data) } );
+        };
+
+        function processData(allRows) {
+        
+        console.log(allRows);
+        var x = [], y = [], xx = [], t = [], z = [];
+
+        for (var i = 0; i < allRows.length; i++) {
+            row = allRows[i];
+            x.push(row['x']);
+            y.push(row['y']);
+            xx.push(row['xx']);
+            t.push(row['t']);
+            z.push(row['z']);
+        }
+        //console.log('X', x, 'Y', y);
+        makePlotXY(x, y);
+        makePlotPoincare(x, xx);
+        makePlotXYt(x, y, t);
+        makePlotXY_3D(x, y, z)
+        }
+
+        function makePlotXY(x, y){
+        var plotDiv = document.getElementById("plot");
+        var traces = [{
+            x: x,
+            y: y
+        }];
+
+        Plotly.newPlot('chartXY', traces,
+            {title: 'Фазовая кривая'});
+        };
+
+        function makePlotPoincare(x, y){
+        var plotDiv = document.getElementById("plot");
+        var traces = [{
+            x: x,
+            y: y
+        }];
+
+        Plotly.newPlot('chartPoincare', traces,
+            {title: 'Пуанкаре'});
+        };
+
+        function makePlotXYt(x, y, t){
+        var plotDiv = document.getElementById("plot");
+        var traceX = {
+            x: t,
+            y: x,
+            name: 'x'
+        };
+
+        var traceY = {
+            x: t,
+            y: y,
+            name: 'y'
+        };
+
+        traces = [traceX, traceY];
+
+        Plotly.newPlot('chartXYt', traces,
+            {title: 'XYt'});
+        };
+
+        function makePlotXY_3D(x, y, z){
+        var plotDiv = document.getElementById("plot");
+
+        // base plane
+        var basePlane = [];
+        for(let x = 0; x <= 10; x++){
+            var line = []
+            for(let y = 0; y <= 10; y++)
+                line.push(0)
+            basePlane.push(line)
+        }
+
+        // input plane
+        var inputPlane = [];
+        for(let x = 0; x <= 10; x++){
+            var line = []
+            for(let y = 0; y <= 10; y++)
+                line.push(-x-y-2)
+            inputPlane.push(line)
+        }
+
+        function getData() {
+            var basePlane = [];
+            for(let i = 0; i<10; i++)
+            basePlane.push(Array(10).fill().map(() => 0))
+            return basePlane;
+        }  
+
+        var data = getData();
+        //console.log(data);
+
+        var trace = {
+            type: 'scatter3d',
+            mode: 'lines',
+            x: x,
+            y: y,
+            z: z,
+            opacity: 1,
+            line: {
+                color: '#000000'
+            },
+            name: 'flow'
+        };
+
+        var base = {
+            z: basePlane,
+            showscale: false,
+            opacity: 0.1,
+            type: 'surface',
+            name: 'базовая плоскость'
+        };
+
+        var input = {
+            z: inputPlane,
+            showscale: false,
+            opacity: 0.9,
+            type: 'surface',
+            name: 'данная плоскость'
+        };
+
+        data = [base, input, trace];
+
+        Plotly.newPlot('chartXY3D', data,
+            {
+                title: 'XY',
+                height: 1000
+            });
+        };
+        
+        //--------------
+        plot();
+
+    </script>
+
+    <body>
+        <div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h1>Анализ данных</h1>
+				</div>
+			</div>			
+			
+			<form action="#" method="POST">
+				<fieldset>
+				
+					<div class="row pad">
+						<div class="col-12">
+							<div class="form-group">
+								<input type="text" class="form-control" id="name" placeholder="Ваше имя">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12" >
+							<button type="button" class="btn btn-primary btn-lg btn-block" id="save">Построить графики</button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+            
+            <div class="wrapper">
+                <div id="chartXYt"></div>
+            </div>
+
+            <table width="100%" cellpadding="5">
+                <tr>
+                 <td style="width: 50%;">
+                    <div class="wrapper">
+                        <div id="chartXY"></div>
+                    </div>
+                 </td>
+                 <td style="width: 50%;">
+                    <div class="wrapper">
+                        <div id="chartPoincare"></div>
+                    </div>
+                 </td>
+                </tr>
+                <tr>
+                    2 line
+               </tr>
+            </table>
+            
+            <div class="wrapper">
+                <div id="chartXY3D"></div>
+            </div>
+
+		</div>
+    </body>
+
+</html>

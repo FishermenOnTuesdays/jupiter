@@ -1,0 +1,265 @@
+<html>
+
+	<head>
+
+		<title>Сбор данных</title>
+		<meta charset="utf-8" />
+		<link rel = "stylesheet" href="bootstrap.min.css"/>
+		<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+		<style>
+			.nav-text {
+				display:none;
+				padding-bottom:20px;
+			}
+			
+			.nav-text .inner {
+				border:1px #ddd solid;
+				border-top:none	;
+				padding: 20px;
+			}
+			
+			.nav-text.active {display:block;}
+			
+			.pad {padding: 10px 0 10px;}
+			
+			.noselect {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+				-khtml-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				-o-user-select: none;
+				user-select: none;
+				}
+			
+			PRE {
+				font-size:0.7em;
+				margin:0;
+			}
+			
+			H1 {
+				margin:30px auto 30px;
+				text-align: center;
+			}
+			
+		</style>
+		<script type="text/javascript">
+
+		var data = {
+			textNum: '1',
+			rawText: '',
+			name: '',
+			new_user: '',
+			data: [],
+		};
+		
+		jQuery(function(){
+			jQuery("A.nav-link").click(onTabClick);
+			jQuery("#save").click(onSave);
+			jQuery("#text").keydown(checkKeycode);
+		});
+		
+		function onTabClick(event)
+		{
+			var a = jQuery(event.target);
+			var href = a.attr("href");
+			jQuery('.nav-text').removeClass('active');
+			jQuery('.nav-link').removeClass('active');
+			jQuery('#'+href).addClass('active');
+			a.addClass('active');
+			
+			jQuery('#text').val("");
+			
+			data.textNum = href;
+			data.data = [];
+			
+			return false;
+		}
+		
+		function onSave()
+		{
+			data.name = jQuery("#name").val();
+			data.new_user = jQuery("#new_user").val();
+			data.rawText = jQuery("#"+data.textNum + " .inner").text();
+			data.userText = jQuery("#text").val();
+			console.log(data);
+			jQuery.post('test1.php', data, success)
+			
+		}
+		
+		function success(data)
+		{
+			var er = jQuery('<div>' + data + '</div></br>');
+			var code = jQuery(".code");
+			var d = jQuery('<div id="success_alert" class="alert alert-success" role="alert">Отправка завершена</div>');
+			code.prepend(d, er);
+			jQuery("#success_alert").delay(5000).fadeOut(500);
+		
+		}
+		
+		
+		</script>
+	</head>
+
+	<body>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<h1>Клавиатурный почерк</h1>
+				</div>
+			</div>			
+			
+			<form action="#" method="POST">
+				<fieldset>
+				
+					<div class="row pad">
+						<div class="col-12">
+							<div class="form-group">
+								<input type="text" class="form-control" id="name" placeholder="Ваше имя">
+							</div>
+						</div>
+					</div>
+					
+					<div class="row pad">
+						<div class="col-12">
+							<div class="form-group">
+								<input type="text" class="form-control" id="new_user" placeholder="New user? (Yes or No)">
+							</div>
+						</div>
+					</div>
+				
+					<div class="row">
+						<div class="col-12">
+						<ul class="nav nav-tabs">
+							<li class="nav-item">
+								<a class="nav-link active" href="nav-text-1">Текст 1</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="nav-text-2">Текст 2</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="nav-text-3">Текст 3</a>
+							</li>
+						</ul>
+						</div>
+					</div>
+				
+					<div class="row">
+						<div class="col-12 nav-text active noselect" id="nav-text-1">
+							<div class="inner">He was only once crossed, and that was towards the end, when my poor father was far gone in a decline that took him off.</div>
+						</div>
+						
+						<div class="col-12 nav-text noselect" id="nav-text-2">
+							<div class="inner">The summer evenings were long. It was not dark, yet. Presently Tom checked his whistle. A stranger was before him a shade larger than himself.</div>
+						</div>
+						
+						<div class="col-12 nav-text noselect" id="nav-text-3">
+							<div class="inner">Between him and Darcy there was a very steady friendship, in spite of great opposition of character.</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12" >
+							<div class="form-group">
+								<textarea class="form-control" rows="10" placeholder="Введите текст здесь" id="text"></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12" >
+							<button type="button" class="btn btn-primary btn-lg btn-block" id="save">Записать результат</button>
+						</div>
+					</div>
+
+				</fieldset>
+			</form>
+
+			<div class="row">
+				<div class="col-12 code">
+				</div>
+			</div>	
+			
+		</div>
+			
+			
+
+			
+			<div id='textarea'></div>
+			
+			<script type="text/javascript">
+			<!--
+				
+				var g = "";
+				var timeinterval = 0;
+				var timeprev = 0;
+				var left = [49, 50, 51, 52, 81, 87, 69, 82, 65, 83, 68, 90, 88, 67, 192];
+				var center = [82, 84, 89, 85, 70, 71, 72, 74, 67, 86, 66, 78, 77, 53, 54, 55, 56, 32];
+				var right = [55, 56, 57, 48, 189, 187, 8, 85, 73, 79, 80, 219, 221, 220, 74, 75, 76, 186, 222, 78, 77, 188, 190, 191, 16, 18, 17, 37, 38, 40, 39];
+				var up = [192, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 189, 187, 8, 9, 81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221, 220];
+				var middle = [20, 65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 222];
+				var bottom = [90, 88, 67, 86, 66, 78, 77, 188, 190, 191, 16, 91, 18, 32, 17, 37, 38, 40, 39];
+				var prevkey = 0;
+				var combnum = 0;
+				
+				//document.onkeydown = 
+				function checkKeycode(event){
+					var keycode;
+					var ctrlKey;
+					var altKey;
+					var shiftKey;
+					var timeStamp;
+					if(!event) var event = window.event;
+					if (event.keyCode){
+						keycode = event.keyCode;
+						ctrlKey = event.ctrlKey;
+						altKey = event.altKey;
+						shiftKey = event.shiftKey;
+						timeStamp = event.timeStamp;
+							}// IE
+					else if(event.which){
+						keycode = event.which;
+						ctrlKey = event.ctrlKey;
+						altKey = event.altKey;
+						shiftKey = event.shiftKey;
+						timeStamp = event.timeStamp;
+						}// all browsers
+					timeinterval = timeStamp - timeprev;
+					
+					if (left.indexOf(keycode) != -1) g = g + " left";
+					if (center.indexOf(keycode) != -1) g = g + " center";
+					if (right.indexOf(keycode) != -1) g = g + " right";
+					if (up.indexOf(keycode) != -1) g = g + " top";
+					if (middle.indexOf(keycode) != -1) g = g + " middle";
+					if (bottom.indexOf(keycode) != -1) g = g + " bottom";
+					
+					combnum = 1000 * prevkey + keycode;
+					
+					var pre = jQuery("<pre>" + keycode + " " + combnum + " " + ctrlKey + " " + altKey + " " + shiftKey + " " + timeStamp + " " + timeinterval + g + "</pre>");
+					
+					data.data.push({
+						keyCode: keycode,
+						combnum : combnum,
+						ctrlKey: ctrlKey,
+						altKey: altKey,
+						shiftKey: shiftKey,
+						timeStamp: timeStamp,
+						timeInterval: timeinterval,
+						part: g,
+					});
+					
+					var code = jQuery(".code");
+					code.append(pre);
+					timeprev = timeStamp;
+					g = "";
+					prevkey = keycode;
+
+				}
+				
+			-->
+			</script>
+	
+	</body>
+
+</html>
