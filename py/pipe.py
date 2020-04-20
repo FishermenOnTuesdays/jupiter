@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 
-p = Popen(['..\solver.exe'], shell=True, stdout=PIPE, stdin=PIPE)
+p = Popen(['..\cpp\solver.exe'], shell=True, stdout=PIPE, stdin=PIPE)
 
 for ii in range(10):
     value = str(ii) + '\n'
