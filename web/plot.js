@@ -43,7 +43,7 @@ for (var i = 0; i < allRows.length; i++) {
     //z.push(row['z']);
     //xx.push(row['xx']);
 }
-//console.log('X', x, 'Y', y);
+
 makePlotXY(x1, x2);
 //makePlotPoincare(x, xx);
 makePlotXYt(x1, x2, t);
@@ -161,4 +161,4 @@ Plotly.newPlot('chartXY3D', data,
     });
 };
 
-//--------------
+//-------------------------------------------------------
