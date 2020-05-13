@@ -15,7 +15,7 @@ function onDraw()
         "z": jQuery("#z").val()
     }
 
-    console.log("gone");
+    //console.log("gone");
     jQuery.post('http://127.0.0.1:5000', data, success)
     
 }
@@ -23,7 +23,7 @@ function onDraw()
 function success(data)
 {
     console.log(data);
-    console.log("success");
+    //console.log("success");
 }
 
 //--------------------------------------------------------------------------

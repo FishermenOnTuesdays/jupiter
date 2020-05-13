@@ -10,14 +10,14 @@ def calc(data):
 
     answer = []
 
-    for ii in range(10):
-        value = str(ii) + '\n'
+    for param in data:
+        value = str(param) + '\n'
         value = bytes(value, 'UTF-8')  # Needed in Python 3.
         p.stdin.write(value)
         p.stdin.flush()
-        result = p.stdout.readline().strip()
-        #answer.append(int(result))
 
+    result = p.stdout.readline().strip()
+    answer.append(result.decode('utf-8'))
     return answer
 
 
@@ -38,7 +38,7 @@ class S(BaseHTTPRequestHandler):
         # logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n",
         #             str(self.path), str(self.headers), post_data.decode('utf-8'))
         data = parse_qs(post_data.decode('utf-8'))
-        # print(data)
+        print(data)
         # print(post_data.decode('utf-8'))
 
         self._set_response()
