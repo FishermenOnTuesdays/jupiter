@@ -15,6 +15,11 @@ function onDraw()
         "N": jQuery("#N").val()
     }
 
+    var er = jQuery('<div>' + data + '</div></br>');
+    var code = jQuery(".code");
+    var d = jQuery('<div id="success_alert" class="alert alert-warning text_center" role="alert">ОБРАБОТКА</div>');
+    code.prepend(d);
+
     jQuery.post('http://127.0.0.1:5000', data, success)
     
 }
@@ -23,11 +28,7 @@ function success(data)
 {
     console.log(data);
     //console.log("success");
-    var er = jQuery('<div>' + data + '</div></br>');
-    var code = jQuery(".code");
-    var d = jQuery('<div id="success_alert" class="alert alert-success" role="alert">Отправка завершена</div>');
-    //code.prepend(d, er);
-    jQuery("#success_alert").delay(5000).fadeOut(500);
+    jQuery("#success_alert").delay(500).fadeOut(100);
     plot();
 }
 
@@ -38,44 +39,47 @@ function plot(path) {
 
 function processData(allRows) {
 
-console.log(allRows);
-var x1 = [], x2 = [], x3 = [], xx = [], t = [], z = [];
+    console.log(allRows);
+    var x1 = [], x2 = [], x3 = [], xx = [], t = [], z = [];
 
-ndims = Object.keys(allRows[0]).length - 1
+    ndims = Object.keys(allRows[0]).length - 1
 
-for (var i = 0; i < allRows.length; i++) {
-    row = allRows[i];
-    x1.push(row['x1']);
+    for (var i = 0; i < allRows.length; i++) {
+        row = allRows[i];
+        x1.push(row['x1']);
+        if (ndims > 1){
+            x2.push(row['x2']);
+            if (ndims > 2){
+                x3.push(row['x3']);
+            }
+            else{
+                x3.push(0);
+            }
+        }
+        t.push(row['t']);
+        
+        //xx.push(row['xx']);
+    }
+
+    dims = [x1]
+
     if (ndims > 1){
-        x2.push(row['x2']);
+        dims.push(x2);
         if (ndims > 2){
-            x3.push(row['x3']);
+            dims.push(x3);
         }
     }
-    t.push(row['t']);
-    
-    //xx.push(row['xx']);
+
+    console.log(ndims);
+    console.log(dims);
+
+    makePlotXY(x1, x2);
+    //makePlotPoincare(x, xx);
+    makePlotT(ndims, dims, t);
+    makePlot3D(x1, x2, x3);
 }
 
-dims = [x1]
-
-if (ndims > 1){
-    dims.push(x2);
-    if (ndims > 2){
-        dims.push(x3);
-    }
-}
-
-console.log(ndims);
-console.log(dims);
-
-makePlotXY(x1, x2);
-//makePlotPoincare(x, xx);
-makePlotT(ndims, dims, t);
-//makePlotXY_3D(x1, x2, x3);
-}
-
-function makePlotXY(x, y){
+function makePlotXY(x, y, ndims){
 var plotDiv = document.getElementById("plot");
 var traces = [{
     x: x,
@@ -115,7 +119,7 @@ Plotly.newPlot('chartXYt', traces,
     {title: 'XYt'});
 };
 
-function makePlotXY_3D(x, y, z){
+function makePlot3D(x, y, z){
 var plotDiv = document.getElementById("plot");
 
 // base plane
