@@ -1,3 +1,32 @@
+jQuery(function(){
+    jQuery("#draw").click(onDraw);
+});
+
+function onDraw()
+{
+    //data.name = jQuery("#name").val();
+    //data.new_user = jQuery("#new_user").val();
+    //data.rawText = jQuery("#"+data.textNum + " .inner").text();
+    //data.userText = jQuery("#text").val();
+
+    data = {
+        "x": jQuery("#x").val(),
+        "y": jQuery("#y").val(),
+        "z": jQuery("#z").val()
+    }
+
+    console.log("gone");
+    jQuery.post('http://127.0.0.1:5000', data, success)
+    
+}
+
+function success(data)
+{
+    console.log(data);
+    console.log("success");
+}
+
+//--------------------------------------------------------------------------
 function plot() {
     Plotly.d3.csv("out.csv", function(data){ processData(data) } );
     };

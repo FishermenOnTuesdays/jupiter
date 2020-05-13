@@ -3,6 +3,7 @@
         <title>Анализ данных</title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <link rel = "stylesheet" href="bootstrap.min.css"/>
+        <script src="jquery-3.5.0.min.js"></script>
         <script src="plotly.min.js"></script>
         <script src="plot.js"></script>
     </head>
@@ -64,14 +65,16 @@
 					<div class="row pad">
 						<div class="col-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="name" placeholder="...">
+                                <input type="text" class="form-control" id="x" placeholder="x">
+                                <input type="text" class="form-control" id="y" placeholder="y">
+                                <input type="text" class="form-control" id="z" placeholder="z">
 							</div>
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-12" >
-							<button type="button" class="btn btn-primary btn-lg btn-block" id="save">Построить графики</button>
+							<button type="button" class="btn btn-primary btn-lg btn-block" id="draw">Построить графики</button>
 						</div>
 					</div>
 				</fieldset>
