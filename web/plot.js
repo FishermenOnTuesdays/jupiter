@@ -23,6 +23,11 @@ function success(data)
 {
     console.log(data);
     //console.log("success");
+    var er = jQuery('<div>' + data + '</div></br>');
+    var code = jQuery(".code");
+    var d = jQuery('<div id="success_alert" class="alert alert-success" role="alert">Отправка завершена</div>');
+    //code.prepend(d, er);
+    jQuery("#success_alert").delay(5000).fadeOut(500);
     plot();
 }
 
@@ -34,21 +39,40 @@ function plot(path) {
 function processData(allRows) {
 
 console.log(allRows);
-var x1 = [], x2 = [], xx = [], t = [], z = [];
+var x1 = [], x2 = [], x3 = [], xx = [], t = [], z = [];
+
+ndims = Object.keys(allRows[0]).length - 1
 
 for (var i = 0; i < allRows.length; i++) {
     row = allRows[i];
     x1.push(row['x1']);
-    x2.push(row['x2']);
+    if (ndims > 1){
+        x2.push(row['x2']);
+        if (ndims > 2){
+            x3.push(row['x3']);
+        }
+    }
     t.push(row['t']);
-    //z.push(row['z']);
+    
     //xx.push(row['xx']);
 }
 
+dims = [x1]
+
+if (ndims > 1){
+    dims.push(x2);
+    if (ndims > 2){
+        dims.push(x3);
+    }
+}
+
+console.log(ndims);
+console.log(dims);
+
 makePlotXY(x1, x2);
 //makePlotPoincare(x, xx);
-makePlotXYt(x1, x2, t);
-//makePlotXY_3D(x, y, z)
+makePlotT(ndims, dims, t);
+//makePlotXY_3D(x1, x2, x3);
 }
 
 function makePlotXY(x, y){
@@ -73,21 +97,19 @@ Plotly.newPlot('chartPoincare', traces,
     {title: 'Пуанкаре'});
 };
 
-function makePlotXYt(x, y, t){
+function makePlotT(ndims, dims, t){
 var plotDiv = document.getElementById("plot");
-var traceX = {
-    x: t,
-    y: x,
-    name: 'x'
-};
 
-var traceY = {
-    x: t,
-    y: y,
-    name: 'y'
-};
+traces = []
 
-traces = [traceX, traceY];
+for (var i = 1; i <= ndims; i++) {
+    id = "x" + i
+    traces.push({
+        x: t,
+        y: dims[i - 1],
+        name: id
+    });
+}
 
 Plotly.newPlot('chartXYt', traces,
     {title: 'XYt'});
@@ -161,5 +183,3 @@ Plotly.newPlot('chartXY3D', data,
         height: 1000
     });
 };
-
-//-------------------------------------------------------
