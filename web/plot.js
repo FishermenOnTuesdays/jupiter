@@ -11,7 +11,8 @@ function onDraw()
         "x3": jQuery("#x3").val(),
         "x1_0": jQuery("#x1_0").val(),
         "x2_0": jQuery("#x2_0").val(),
-        "x3_0": jQuery("#x3_0").val()
+        "x3_0": jQuery("#x3_0").val(),
+        "N": jQuery("#N").val()
     }
 
     jQuery.post('http://127.0.0.1:5000', data, success)
