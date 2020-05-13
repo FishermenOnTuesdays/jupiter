@@ -10,13 +10,20 @@ def calc(data):
 
     answer = []
 
+    # send number of input params
+    value = str(len(data) // 2) + '\n'
+    value = bytes(value, 'UTF-8')  # Needed in Python 3.
+    p.stdin.write(value)
+    p.stdin.flush()
+
     for param in data:
-        value = str(param) + '\n'
+        value = str(data[param][0]) + '\n'
         value = bytes(value, 'UTF-8')  # Needed in Python 3.
         p.stdin.write(value)
         p.stdin.flush()
 
     result = p.stdout.readline().strip()
+    print(result.decode('utf-8'))
     answer.append(result.decode('utf-8'))
     return answer
 

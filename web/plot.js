@@ -4,18 +4,16 @@ jQuery(function(){
 
 function onDraw()
 {
-    //data.name = jQuery("#name").val();
-    //data.new_user = jQuery("#new_user").val();
-    //data.rawText = jQuery("#"+data.textNum + " .inner").text();
-    //data.userText = jQuery("#text").val();
 
     data = {
-        "x": jQuery("#x").val(),
-        "y": jQuery("#y").val(),
-        "z": jQuery("#z").val()
+        "x1": jQuery("#x1").val(),
+        "x2": jQuery("#x2").val(),
+        "x3": jQuery("#x3").val(),
+        "x1_0": jQuery("#x1_0").val(),
+        "x2_0": jQuery("#x2_0").val(),
+        "x3_0": jQuery("#x3_0").val()
     }
 
-    //console.log("gone");
     jQuery.post('http://127.0.0.1:5000', data, success)
     
 }
@@ -24,31 +22,32 @@ function success(data)
 {
     console.log(data);
     //console.log("success");
+    plot();
 }
 
 //--------------------------------------------------------------------------
-function plot() {
-    Plotly.d3.csv("out.csv", function(data){ processData(data) } );
+function plot(path) {
+    Plotly.d3.csv("../res/result.csv", function(data){ processData(data) } );
     };
 
 function processData(allRows) {
 
 console.log(allRows);
-var x = [], y = [], xx = [], t = [], z = [];
+var x1 = [], x2 = [], xx = [], t = [], z = [];
 
 for (var i = 0; i < allRows.length; i++) {
     row = allRows[i];
-    x.push(row['x']);
-    y.push(row['y']);
-    xx.push(row['xx']);
+    x1.push(row['x1']);
+    x2.push(row['x2']);
     t.push(row['t']);
-    z.push(row['z']);
+    //z.push(row['z']);
+    //xx.push(row['xx']);
 }
 //console.log('X', x, 'Y', y);
-makePlotXY(x, y);
-makePlotPoincare(x, xx);
-makePlotXYt(x, y, t);
-makePlotXY_3D(x, y, z)
+makePlotXY(x1, x2);
+//makePlotPoincare(x, xx);
+makePlotXYt(x1, x2, t);
+//makePlotXY_3D(x, y, z)
 }
 
 function makePlotXY(x, y){
@@ -163,4 +162,3 @@ Plotly.newPlot('chartXY3D', data,
 };
 
 //--------------
-plot();
