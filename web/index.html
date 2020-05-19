@@ -12,41 +12,6 @@
         .text_center {
             text-align: center;
             }
-
-        .nav-text {
-            display:none;
-            padding-bottom:20px;
-        }
-        
-        .nav-text .inner {
-            border:1px #ddd solid;
-            border-top:none	;
-            padding: 20px;
-        }
-        
-        .nav-text.active {display:block;}
-        
-        .pad {padding: 10px 0 10px;}
-        
-        .noselect {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -o-user-select: none;
-            user-select: none;
-            }
-        
-            .wrapper {
-            padding-top: 5px;
-            padding-bottom: 5px;
-            }
-
-        PRE {
-            font-size:0.7em;
-            margin:0;
-        }
         
         H1 {
             margin:30px auto 30px;
@@ -67,6 +32,10 @@
         .m10 {
             margin: 10px;
         } 
+
+        .remove {
+            
+        }
         
     </style>
 
@@ -77,59 +46,57 @@
 					<h1>...</h1>
 				</div>
 			</div>			
-			
+            
+            <fieldset>
+                <div class="col"><h4>условия</h4></div>
+                <div class="row align-items-center no-gutters">
+                    <div class="col-1">
+                        <input type="text" class="form-control" id="x_0" placeholder="x1_0">
+                    </div>
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="x" placeholder="x1">
+                    </div>
+                </div>
+                
+                <div class="row align-items-center no-gutters">
+                    <div class="col-1">
+                        <input type="text" class="form-control" id="x_0" placeholder="x2_0">
+                    </div>
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="x" placeholder="x2">
+                    </div>
+                </div>
+
+                <div class="row align-items-center no-gutters">
+                    <div class="col-1">
+                        <input type="text" class="form-control" id="x_0" placeholder="x3_0">
+                    </div>
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="x" placeholder="x3">
+                    </div>
+                    <button class="remove btn btn-outline-light">&#10060;</button>
+                </div>
+            </fieldset>
+
 			<form action="#" method="POST">
-				<fieldset>
-
-                    <div class="row align-items-center no-gutters">
-                        <div class="col"><h4>x1</h4></div>
-                        <div class="col-1">
-                            <input type="text" class="form-control" id="x1_0" placeholder="x1_0">
-                        </div>
-                        <div class="col-10">
-                            <input type="text" class="form-control" id="x1" placeholder="x1">
-                        </div>
+                <div class="row justify-content-center">
+                    <div class="col-6 m10">
+                        <button type="button" class="btn btn-outline-dark btn-block" id="addx">добавить переменную</button>
                     </div>
-                    
-                    <div class="row align-items-center no-gutters">
-                        <div class="col"><h4>x2</h4></div>
-                        <div class="col-1">
-                            <input type="text" class="form-control" id="x2_0" placeholder="x2_0">
-                        </div>
-                        <div class="col-10">
-                            <input type="text" class="form-control" id="x2" placeholder="x2">
-                        </div>
-                    </div>
+                </div>
 
-                    <div class="row align-items-center no-gutters">
-                        <div class="col"><h4>x3</h4></div>
-                        <div class="col-1">
-                            <input type="text" class="form-control" id="x3_0" placeholder="x3_0">
-                        </div>
-                        <div class="col-10">
-                            <input type="text" class="form-control" id="x3" placeholder="x3">
-                        </div>
+                <div class="row align-items-center no-gutters">
+                    <div class="col m10"><h4>число итераций</h4></div>
+                    <div class="col-10">
+                        <input type="text" class="form-control" id="N" placeholder="N">
                     </div>
-                    
-                    <div class="row justify-content-center">
-						<div class="col-6 m10">
-							<button type="button" class="btn btn-outline-dark btn-block" id="addx">добавить переменную</button>
-						</div>
-					</div>
+                </div>
 
-                    <div class="row align-items-center no-gutters">
-                        <div class="col m10"><h4>число итераций</h4></div>
-                        <div class="col-10">
-                            <input type="text" class="form-control" id="N" placeholder="N">
-                        </div>
+                <div class="row justify-content-center">
+                    <div class="col-12" >
+                        <button type="button" class="btn btn-primary btn-lg btn-block" id="draw">Построить графики</button>
                     </div>
-
-					<div class="row justify-content-center">
-						<div class="col-12" >
-							<button type="button" class="btn btn-primary btn-lg btn-block" id="draw">Построить графики</button>
-						</div>
-					</div>
-				</fieldset>
+                </div>
             </form>
             
 			<div class="row">

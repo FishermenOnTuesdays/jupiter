@@ -1,21 +1,35 @@
+function newrow(){
+    var newx = '<div class="row align-items-center no-gutters"><div class="col-1"><input type="text" class="form-control" id="x_0" placeholder="xi_0"></div><div class="col-10"><input type="text" class="form-control" id="x" placeholder="xi"></div><button class="remove btn btn-outline-light">&#10060;</button></div>';
+    count = 1;
+    $('input[id="x"]').each(function(i, elem){
+        count++;
+    });
+    return newx.split("xi").join('x'+count);
+}
+
 jQuery(function(){
     jQuery("#draw").click(onDraw);
+    jQuery('#addx').click(function(){
+        $('fieldset').append(newrow());
+    });
+    $(document).on('click', '.remove', function() {
+        $(this).parent().remove();
+    });
 });
 
 function onDraw()
 {
 
-    data = {
-        "x1": jQuery("#x1").val(),
-        "x2": jQuery("#x2").val(),
-        "x3": jQuery("#x3").val(),
-        "x1_0": jQuery("#x1_0").val(),
-        "x2_0": jQuery("#x2_0").val(),
-        "x3_0": jQuery("#x3_0").val(),
-        "N": jQuery("#N").val()
-    }
+    var data = {};
+    jQuery('input[id="x"]').each(function(i, elem){
+        data['x' + (i + 1)] = $(elem).val();
+    });
+    jQuery('input[id="x_0"]').each(function(i, elem){
+        data['x' + (i + 1) + '_0'] = $(elem).val();
+    });
+    data['N'] = jQuery("#N").val();
 
-    var er = jQuery('<div>' + data + '</div></br>');
+    //var er = jQuery('<div>' + data + '</div></br>');
     var code = jQuery(".code");
     var d = jQuery('<div id="success_alert" class="alert alert-warning text_center" role="alert">ОБРАБОТКА</div>');
     code.prepend(d);
@@ -40,43 +54,36 @@ function plot(path) {
 function processData(allRows) {
 
     console.log(allRows);
-    var x1 = [], x2 = [], x3 = [], xx = [], t = [], z = [];
-
     ndims = Object.keys(allRows[0]).length - 1
+
+    var xs = {};
+    for (var i = 1; i <= ndims; i++){
+        xs['x' + i] = [];
+    }
+    if (ndims < 3){
+        xs['x3'] = [];
+    }
+
+    var t = [];
 
     for (var i = 0; i < allRows.length; i++) {
         row = allRows[i];
-        x1.push(row['x1']);
-        if (ndims > 1){
-            x2.push(row['x2']);
-            if (ndims > 2){
-                x3.push(row['x3']);
-            }
-            else{
-                x3.push(0);
-            }
+        for (var j = 1; j <= ndims; j++){
+            xs['x' + j].push(row['x' + j]);
+        }
+        if (ndims < 3){
+            xs['x3'].push(0);
         }
         t.push(row['t']);
-        
-        //xx.push(row['xx']);
-    }
-
-    dims = [x1]
-
-    if (ndims > 1){
-        dims.push(x2);
-        if (ndims > 2){
-            dims.push(x3);
-        }
     }
 
     console.log(ndims);
-    console.log(dims);
+    console.log(xs);
 
-    makePlotXY(x1, x2);
+    makePlotXY(xs['x1'], xs['x2']);
     //makePlotPoincare(x, xx);
-    makePlotT(ndims, dims, t);
-    makePlot3D(x1, x2, x3);
+    makePlotT(ndims, xs, t);
+    makePlot3D(xs['x1'], xs['x2'], xs['x3']);
 }
 
 function makePlotXY(x, y, ndims){
@@ -110,7 +117,7 @@ for (var i = 1; i <= ndims; i++) {
     id = "x" + i
     traces.push({
         x: t,
-        y: dims[i - 1],
+        y: dims[id],
         name: id
     });
 }
@@ -152,17 +159,18 @@ var data = getData();
 
 var trace = {
     type: 'scatter3d',
-    mode: 'lines',
+    mode: 'markers',
     x: x,
     y: y,
     z: z,
     opacity: 1,
-    line: {
-        color: '#000000'
+    marker: {
+        color: '#000000',
+		size: 2,
     },
     name: 'flow'
 };
-
+/*
 var base = {
     z: basePlane,
     showscale: false,
@@ -180,7 +188,8 @@ var input = {
 };
 
 data = [base, input, trace];
-
+*/
+data = [trace];
 Plotly.newPlot('chartXY3D', data,
     {
         title: 'XY',
