@@ -33,13 +33,16 @@ jQuery(function(){
     $(document).on('click', '.btn-ch', function(){
         if ($(this).is("active"))
         {
+            s = this.id;
             $(this).siblings().removeClass('active');
-            $(this).parent().siblings()
+            makePlotXY(xs[this.id.split('/')[0]], xs[this.id.split('/')[1]], $(this).parent().siblings()['0'].id);
         }
         else
         {
+            s = this.id;
             $(this).addClass('active');
             $(this).siblings().removeClass('active');
+            makePlotXY(xs[this.id.split('/')[0]], xs[this.id.split('/')[1]], $(this).parent().siblings()['0'].id);
         }
      });
 });
@@ -59,7 +62,11 @@ function onDraw()
     var d = jQuery('<div id="success_alert" class="alert alert-warning text_center" role="alert">ОБРАБОТКА</div>');
     code.prepend(d);
 
-    jQuery.post('http://127.0.0.1:5000', data, success)   
+    jQuery.post(
+        'http://192.168.31.80:5000',
+        data,
+        success
+    );
 }
 
 function success(data)
@@ -190,7 +197,6 @@ function makePlotPhase(){
 }
 
 function makePlotXY(x, y, type){
-var plotDiv = document.getElementById("plot");
 var traces = [{
     x: x,
     y: y
