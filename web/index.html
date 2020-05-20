@@ -103,33 +103,58 @@
 				<div class="col-12 code">
 				</div>
 			</div>
-            
-            <div class="wrapper">
+        </div>
+        
+        <div class="container-fluid" id="charts">
+
+            <div class="wrapper shadow p-3 mb-5 bg-white rounded ml-1">
                 <div id="chartXYt"></div>
             </div>
 
-            <table width="100%" cellpadding="5">
-                <tr>
-                 <td style="width: 50%;">
-                    <div class="wrapper">
+            <div class="container-fluid" id="phasecharts">
+                <div class="col-12">
+                    <h1>фазовые кривые</h1>
+                </div>
+                <div class="row">
+                    <div class="col-sm shadow p-3 mb-5 bg-white rounded ml-1">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-outline-primary active">1</button>
+                            <button type="button" class="btn btn-outline-primary">2</button>
+                            <button type="button" class="btn btn-outline-primary">3</button>
+                        </div>
                         <div id="chartXY"></div>
                     </div>
-                 </td>
-                 <td style="width: 50%;">
-                    <div class="wrapper">
-                        <div id="chartPoincare"></div>
+                    <div class="col-sm shadow p-3 mb-5 bg-white rounded ml-1">
+                        <div id="phasechart2">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-primary">1</button>
+                                <button type="button" class="btn btn-outline-primary active">2</button>
+                                <button type="button" class="btn btn-outline-primary">3</button>
+                            </div>
+                            <div id="chartXZ"></div>
+                        </div>
                     </div>
-                 </td>
-                </tr>
-                <tr>
-                    
-               </tr>
-            </table>
-            
+                    <div class="col-sm shadow p-3 mb-5 bg-white rounded ml-1">
+                        <div id="phasechart3">
+                            <div class="btn-group mr-2" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-primary">1</button>
+                                <button type="button" class="btn btn-outline-primary">2</button>
+                                <button type="button" class="btn btn-outline-primary active">3</button>
+                            </div>
+                            <div id="chartYZ"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="wrapper">
+                <div id="chartPoincare"></div>
+            </div>
+            <div class="wrapper" id="3dcharts">
                 <div id="chartXY3D"></div>
             </div>
-		</div>
+        </div>
+
     </body>
 
 </html>

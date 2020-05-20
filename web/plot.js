@@ -1,3 +1,7 @@
+// global vars
+var ndims;
+var xs = {};
+
 function newrow(){
     var newx = '<div class="row align-items-center no-gutters"><div class="col-1"><input type="text" class="form-control" id="x_0" placeholder="xi_0"></div><div class="col-10"><input type="text" class="form-control" id="x" placeholder="xi"></div><button class="remove btn btn-outline-light">&#10060;</button></div>';
     count = 1;
@@ -8,6 +12,14 @@ function newrow(){
 }
 
 jQuery(function(){
+    jQuery("#charts").hide();
+    jQuery("#phasecharts").hide();
+    jQuery("#phasechart2").hide();
+    jQuery("#phasechart3").hide();
+    jQuery("#3dcharts").hide();
+    
+    document.getElementById("N").defaultValue = "1000";
+
     jQuery("#draw").click(onDraw);
     jQuery('#addx').click(function(){
         $('fieldset').append(newrow());
@@ -15,11 +27,18 @@ jQuery(function(){
     $(document).on('click', '.remove', function() {
         $(this).parent().remove();
     });
+    // btns
+    $('.btn').click(function() {
+        if ($(this).is("active"))
+        $(this).siblings().removeClass('active');
+        else
+          $(this).addClass('active');
+          $(this).siblings().removeClass('active');
+    });
 });
 
 function onDraw()
 {
-
     var data = {};
     jQuery('input[id="x"]').each(function(i, elem){
         data['x' + (i + 1)] = $(elem).val();
@@ -29,13 +48,11 @@ function onDraw()
     });
     data['N'] = jQuery("#N").val();
 
-    //var er = jQuery('<div>' + data + '</div></br>');
     var code = jQuery(".code");
     var d = jQuery('<div id="success_alert" class="alert alert-warning text_center" role="alert">ОБРАБОТКА</div>');
     code.prepend(d);
 
-    jQuery.post('http://127.0.0.1:5000', data, success)
-    
+    jQuery.post('http://127.0.0.1:5000', data, success)   
 }
 
 function success(data)
@@ -44,6 +61,7 @@ function success(data)
     //console.log("success");
     jQuery("#success_alert").delay(500).fadeOut(100);
     plot();
+    jQuery("#charts").show();
 }
 
 //--------------------------------------------------------------------------
@@ -56,7 +74,7 @@ function processData(allRows) {
     console.log(allRows);
     ndims = Object.keys(allRows[0]).length - 1
 
-    var xs = {};
+    xs = {};
     for (var i = 1; i <= ndims; i++){
         xs['x' + i] = [];
     }
@@ -79,22 +97,72 @@ function processData(allRows) {
 
     console.log(ndims);
     console.log(xs);
+    if (ndims > 1){
+        jQuery("#phasecharts").show();
+        jQuery("#3dcharts").show();
+        if (ndims > 2){
+            jQuery("#phasechart2").show();
+            jQuery("#phasechart3").show();
+        }
+    }
 
+    // make plots -----------------------------------------------
+    makePlotT(ndims, xs, t);
+    makePlotPhase();
     makePlotXY(xs['x1'], xs['x2']);
     //makePlotPoincare(x, xx);
-    makePlotT(ndims, xs, t);
+    
     makePlot3D(xs['x1'], xs['x2'], xs['x3']);
+    //-----------------------------------------------------------
 }
 
-function makePlotXY(x, y, ndims){
+function makePlotT(ndims, dims, t){
+    var plotDiv = document.getElementById("plot");
+    
+    traces = []
+    
+    for (var i = 1; i <= ndims; i++) {
+        id = "x" + i
+        traces.push({
+            x: t,
+            y: dims[id],
+            name: id
+        });
+    }
+    
+    Plotly.newPlot('chartXYt', traces, {
+        displayModeBar: true,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+            pad: 4}
+        });
+};
+
+makePlotPhase(xs, ndims){
+    if (ndims > 1){
+        makePlotXY(xs['x1'], xs['x2'], 'XY');
+    }
+}
+
+function makePlotXY(x, y, type){
 var plotDiv = document.getElementById("plot");
 var traces = [{
     x: x,
     y: y
 }];
 
-Plotly.newPlot('chartXY', traces,
-    {title: 'Фазовая кривая'});
+Plotly.newPlot('chart' + type, traces, {
+    displayModeBar: true,
+    margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 4}
+    });
 };
 
 function makePlotPoincare(x, y){
@@ -106,24 +174,6 @@ var traces = [{
 
 Plotly.newPlot('chartPoincare', traces,
     {title: 'Пуанкаре'});
-};
-
-function makePlotT(ndims, dims, t){
-var plotDiv = document.getElementById("plot");
-
-traces = []
-
-for (var i = 1; i <= ndims; i++) {
-    id = "x" + i
-    traces.push({
-        x: t,
-        y: dims[id],
-        name: id
-    });
-}
-
-Plotly.newPlot('chartXYt', traces,
-    {title: 'XYt'});
 };
 
 function makePlot3D(x, y, z){
@@ -168,7 +218,7 @@ var trace = {
         color: '#000000',
 		size: 2,
     },
-    name: 'flow'
+    name: 'flow',
 };
 /*
 var base = {
@@ -192,7 +242,14 @@ data = [base, input, trace];
 data = [trace];
 Plotly.newPlot('chartXY3D', data,
     {
-        title: 'XY',
-        height: 1000
-    });
+        height: 1000,
+        displayModeBar: true,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+            pad: 4}
+        }
+    );
 };
