@@ -48,80 +48,100 @@
         .btn-ch{
 
         }
+
+        .animated-gif-container { 
+
+        }
+        .semiopacity {
+            background-image:url("anim.gif");
+            background-repeat:repeat;
+            opacity: 1.0; /* Полупрозрачный фон */
+            filter: alpha(Opacity=50); /* Прозрачность в IE */
+        }
         
     </style>
 
     <body>
-        <div class="container">
-			<div class="row">
-				<div class="col-12">
-					<h1>...</h1>
-				</div>
-			</div>			
+        <div class="container-fluid animated-gif-container semiopacity">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>...</h1>
+                    </div>
+                </div>			
+                <div id="animated-gif-container"></div>
+                <fieldset>
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-1">
+                            <input type="text" class="form-control" id="x_0" placeholder="x1_0">
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="x" placeholder="x1">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-1">
+                            <input type="text" class="form-control" id="x_0" placeholder="x2_0">
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="x" placeholder="x2">
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center no-gutters">
+                        <div class="col-1">
+                            <input type="text" class="form-control" id="x_0" placeholder="x3_0">
+                        </div>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="x" placeholder="x3">
+                        </div>
+                        <button class="remove btn btn-outline-light">&#10060;</button>
+                    </div>
+                </fieldset>
+
+                <form action="#" method="POST">
+                    <div class="row justify-content-center">
+                        <div class="col-6 m10">
+                            <button type="button" class="btn btn-outline-dark btn-block" id="addx">добавить переменную</button>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center no-gutters">
+                        <div class="col m10"><h4>число итераций</h4></div>
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="N" placeholder="N">
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class="col-12" >
+                            <button type="button" class="btn btn-primary btn-lg btn-block" id="draw">Построить графики</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             
-            <fieldset>
-                <div class="row align-items-center no-gutters">
-                    <div class="col-1">
-                        <input type="text" class="form-control" id="x_0" placeholder="x1_0">
-                    </div>
-                    <div class="col-10">
-                        <input type="text" class="form-control" id="x" placeholder="x1">
-                    </div>
-                </div>
-                
-                <div class="row align-items-center no-gutters">
-                    <div class="col-1">
-                        <input type="text" class="form-control" id="x_0" placeholder="x2_0">
-                    </div>
-                    <div class="col-10">
-                        <input type="text" class="form-control" id="x" placeholder="x2">
-                    </div>
-                </div>
+            <div class="row">
+                <div class="col-12"></div>
+            </div>
 
-                <div class="row align-items-center no-gutters">
-                    <div class="col-1">
-                        <input type="text" class="form-control" id="x_0" placeholder="x3_0">
-                    </div>
-                    <div class="col-10">
-                        <input type="text" class="form-control" id="x" placeholder="x3">
-                    </div>
-                    <button class="remove btn btn-outline-light">&#10060;</button>
-                </div>
-            </fieldset>
-
-			<form action="#" method="POST">
-                <div class="row justify-content-center">
-                    <div class="col-6 m10">
-                        <button type="button" class="btn btn-outline-dark btn-block" id="addx">добавить переменную</button>
-                    </div>
-                </div>
-
-                <div class="row align-items-center no-gutters">
-                    <div class="col m10"><h4>число итераций</h4></div>
-                    <div class="col-10">
-                        <input type="text" class="form-control" id="N" placeholder="N">
-                    </div>
-                </div>
-
-                <div class="row justify-content-center">
-                    <div class="col-12" >
-                        <button type="button" class="btn btn-primary btn-lg btn-block" id="draw">Построить графики</button>
-                    </div>
-                </div>
-            </form>
-            
-			<div class="row">
-				<div class="col-12 code">
-				</div>
-			</div>
         </div>
-        
+        <div class="container">
+            <div class="row">
+                <div class="col-12">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="col-12 code"></div>
+            </div>
+        </div>
         <div class="container-fluid" id="charts">
-
             <div class="wrapper shadow p-3 mb-5 bg-white rounded ml-1">
                 <div id="chartXYt"></div>
             </div>
+        </div>
 
+        <div class="container-fluid" id="charts">
             <div class="container-fluid" id="phasecharts">
                 <div class="col-12">
                     <h1>фазовые кривые</h1>
@@ -153,6 +173,7 @@
                 <div id="chartXY3D"></div>
             </div>
         </div>
+        
 
     </body>
 

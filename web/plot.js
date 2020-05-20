@@ -63,7 +63,7 @@ function onDraw()
     code.prepend(d);
 
     jQuery.post(
-        'http://192.168.31.80:5000',
+        'http://26.26.59.129:5000',
         data,
         success
     );
