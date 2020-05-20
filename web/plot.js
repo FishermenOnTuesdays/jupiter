@@ -2,6 +2,8 @@
 var ndims;
 var xs = {};
 
+//-------------------------------------------------------
+
 function newrow(){
     var newx = '<div class="row align-items-center no-gutters"><div class="col-1"><input type="text" class="form-control" id="x_0" placeholder="xi_0"></div><div class="col-10"><input type="text" class="form-control" id="x" placeholder="xi"></div><button class="remove btn btn-outline-light">&#10060;</button></div>';
     count = 1;
@@ -28,13 +30,18 @@ jQuery(function(){
         $(this).parent().remove();
     });
     // btns
-    $('.btn').click(function() {
+    $(document).on('click', '.btn-ch', function(){
         if ($(this).is("active"))
-        $(this).siblings().removeClass('active');
+        {
+            $(this).siblings().removeClass('active');
+            $(this).parent().siblings()
+        }
         else
-          $(this).addClass('active');
-          $(this).siblings().removeClass('active');
-    });
+        {
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+        }
+     });
 });
 
 function onDraw()
@@ -64,6 +71,7 @@ function success(data)
     jQuery("#charts").show();
 }
 
+//plot
 //--------------------------------------------------------------------------
 function plot(path) {
     Plotly.d3.csv("../res/result.csv", function(data){ processData(data) } );
@@ -97,10 +105,18 @@ function processData(allRows) {
 
     console.log(ndims);
     console.log(xs);
+    jQuery("#phasechart2").hide();
+    jQuery("#phasechart3").hide();
+    jQuery("#phasecharts").hide();
+    jQuery("#3dcharts").hide();
+    jQuery("#btngroup1").hide();
     if (ndims > 1){
+        jQuery("#phasechart2").hide();
+        jQuery("#phasechart3").hide();
         jQuery("#phasecharts").show();
         jQuery("#3dcharts").show();
         if (ndims > 2){
+            jQuery("#btngroup1").show();
             jQuery("#phasechart2").show();
             jQuery("#phasechart3").show();
         }
@@ -109,7 +125,7 @@ function processData(allRows) {
     // make plots -----------------------------------------------
     makePlotT(ndims, xs, t);
     makePlotPhase();
-    makePlotXY(xs['x1'], xs['x2']);
+    //makePlotXY(xs['x1'], xs['x2']);
     //makePlotPoincare(x, xx);
     
     makePlot3D(xs['x1'], xs['x2'], xs['x3']);
@@ -141,9 +157,35 @@ function makePlotT(ndims, dims, t){
         });
 };
 
-makePlotPhase(xs, ndims){
-    if (ndims > 1){
-        makePlotXY(xs['x1'], xs['x2'], 'XY');
+function makePlotPhase(){
+    $('.btn-group').each(function(num, elem){
+        $(elem).empty();
+    });
+    if (ndims == 2){
+        makePlotXY(xs['x1'], xs['x2'], 'chartXY');
+    }
+    else {
+        var btnsample = '<button type="button" class="btn btn-outline-primary btn-ch active" id="xi/xj">xixj</button>';
+        $('.btn-group').each(function(num, elem){
+            btn = '';
+            count = 0;
+            for(var i = 1; i <= ndims; i++){
+                for(var j = i + 1; j <= ndims; j++){
+                    btncurr = btnsample;
+                    if (num != count){
+                        btncurr = btncurr.split(" active").join('');
+                    }
+                    btncurr = btncurr.split("xi").join('x' + i);
+                    btncurr = btncurr.split("xj").join('x' + j);
+                    btn += btncurr;
+                    count++;
+                }
+            }
+            $(elem).append(btn);
+        });
+        makePlotXY(xs['x1'], xs['x2'], 'chartXY');
+        makePlotXY(xs['x1'], xs['x3'], 'chartXZ');
+        makePlotXY(xs['x2'], xs['x3'], 'chartYZ');
     }
 }
 
@@ -154,7 +196,7 @@ var traces = [{
     y: y
 }];
 
-Plotly.newPlot('chart' + type, traces, {
+Plotly.newPlot(type, traces, {
     displayModeBar: true,
     margin: {
         l: 50,
